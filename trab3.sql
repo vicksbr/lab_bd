@@ -1,3 +1,6 @@
+---TESTE GITS
+
+
 --atualize o valor TOTAL_UNITARIO da tabela VENDA_ITEM
 --http://www.adp-gmbh.ch/ora/plsql/coll/iterate.html
 
