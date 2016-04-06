@@ -3,16 +3,6 @@
 --atualize o valor TOTAL_UNITARIO da tabela VENDA_ITEM
 --http://www.adp-gmbh.ch/ora/plsql/coll/iterate.html
 
-BEGIN
-  FOR item IN (SELECT VENDA_ITEM_ID FROM VENDA_ITEM)
-  LOOP
-    dbms_output.put_line( item.VENDA_ITEM_ID );
-  END LOOP;
-END;
-
-
-TOTAL_UNITARIO = QUANTIDADE * (PRECO_UNITARIO - DESCONTO_UNITARIO);
-
 SET SERVEROUTPUT ON
 
 DECLARE 
@@ -29,33 +19,33 @@ BEGIN
   LOOP
     FETCH vcursor INTO c_item_venda_id,c_item_venda_total,c_item_venda_preco,c_item_venda_desconto,c_item_venda_quantidade;
     EXIT WHEN vcursor%notfound;
-    UPDATE VENDA_ITEM set TOTAL_UNITARIO=50;
+    UPDATE VENDA_ITEM set TOTAL_UNITARIO=(c_item_venda_quantidade*(c_item_venda_preco-c_item_venda_desconto)) WHERE VENDA_ITEM.VENDA_ITEM_ID = c_item_venda_id;
     
   END LOOP;
   CLOSE vcursor;
 END;
 
 
-
 --Atualize o valor de SUBTOTAL da tabela VENDA
 
+SET SERVEROUTPUT ON
 
-DECLARE	
-	CURSOR c1 is SELECT VENDA_ID, TOTAL_UNITARIO FROM VENDA_ITEM INNER JOIN VENDA ON VENDA_ITEM.VENDA_ID = VENDA.VENDA_ID;
-	u_venda_id NUMBER(38,2);
+DECLARE 
+  u_venda_id NUMBER(38,2);
 	u_total_unitario NUMBER(38,2);
-
+  
+  CURSOR vcursor IS SELECT VENDA_ID, TOTAL_UNITARIO FROM VENDA_ITEM;
+ 
 BEGIN
-	OPEN c1;
-	LOOP 
-		FETCH c1 INTO u_venda_id, u_total_unitario;
-		EXIT WHEN c1%NOTFOUND;
-		UPDATE VENDA set SUBTOTAL=SUBTOTAL+u_total_unitario WHERE VENDA_ID = u_venda_id; 
-	END LOOP;
-	CLOSE c1;
-	COMMIT;
+  OPEN vcursor;
+  LOOP
+    FETCH vcursor INTO u_venda_id,u_total_unitario;
+    EXIT WHEN vcursor%notfound;
+    UPDATE VENDA set SUBTOTAL=(SUBTOTAL + u_total_unitario) WHERE VENDA.VENDA_ID = u_total_unitario;
+    
+  END LOOP;
+  CLOSE vcursor;
 END;
-
 
 --Itere sobre a tabela 'PRODUTO' e imprima as seguintes mensagens 
 
