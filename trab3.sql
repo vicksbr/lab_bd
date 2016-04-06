@@ -13,24 +13,26 @@ END;
 
 TOTAL_UNITARIO = QUANTIDADE * (PRECO_UNITARIO - DESCONTO_UNITARIO);
 
+SET SERVEROUTPUT ON
 
-DECLARE
-   CURSOR c1 is
-   		SELECT VENDA_ITEM_ID, PRECO_UNITARIO,  DESCONTO_UNITARIO, TOTAL_UNITARIO,QUANTIDADE FROM VENDA_ITEM FOR UPDATE            
-   u_venda_item_id NUMBER(38,2);
-   u_preco_unitario NUMBER(38,2);
-   u_desconto_unitario NUMBER(38,2);
-   u_total_unitario   NUMBER(38,2);
-   u_quantidade NUMBER(38,2);
+DECLARE 
+  c_item_venda_id number(38,2);
+  c_item_venda_total number(38,2);
+  c_item_venda_preco number(38,2);
+  c_item_venda_desconto number(38,2);
+  c_item_venda_quantidade number(38,2);
+  
+  CURSOR vcursor IS SELECT VENDA_ITEM_ID, TOTAL_UNITARIO, PRECO_UNITARIO, DESCONTO_UNITARIO, QUANTIDADE FROM VENDA_ITEM vi;
+ 
 BEGIN
-   OPEN c1;
-   LOOP
-   		FETCH c1 INTO u_venda_item_id, u_preco, u_desconto_unitario, u_total_unitario,u_ quantidade;      
-      	EXIT WHEN c1%NOTFOUND;  /* in case the number requested */ /* is more than the total       *//* number of employees          */	    	    
-	    UPDATE VENDA_ITEM set TOTAL_UNITARIO= u_quantidade * (u_preco_unitario - u_desconto_unitario);      	
-   END LOOP;
-   CLOSE c1;
-   COMMIT;
+  OPEN vcursor;
+  LOOP
+    FETCH vcursor INTO c_item_venda_id,c_item_venda_total,c_item_venda_preco,c_item_venda_desconto,c_item_venda_quantidade;
+    EXIT WHEN vcursor%notfound;
+    UPDATE VENDA_ITEM set TOTAL_UNITARIO=50;
+    
+  END LOOP;
+  CLOSE vcursor;
 END;
 
 
