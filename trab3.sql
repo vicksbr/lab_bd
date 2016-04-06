@@ -108,4 +108,36 @@ Desconto Unitário: {DESCONTO_UNITARIO}
 Total Unitário: {TOTAL_UNITARIO}
 Código de Rastreio: {CODIGO_RASTREIO}
 
+set serveroutput on
+
+accept vstring prompt "Entre com o numero venda";  
+
+DECLARE
+   m_venda_id VENDA.VENDA_ID%TYPE;
+   m_data VENDA.DATA_VENDA%TYPE;
+   m_cliente VENDA.CLIENTE_ID%TYPE;
+   m_end_cob VENDA.ENDERECO_COBRANCA%TYPE;
+   m_end_ent VENDA.ENDERECO_ENTREGA%TYPE;
+   m_subtotal VENDA.SUBTOTAL%TYPE;
+   m_imposto VENDA.IMPOSTOS%TYPE;
+   m_frete VENDA.FRETE%TYPE;
+   m_total VENDA.TOTAL_DEVIDO%TYPE;
+BEGIN
+  SELECT VENDA_ID,DATA_VENDA,CLIENTE_ID,ENDERECO_COBRANCA,ENDERECO_ENTREGA,SUBTOTAL,IMPOSTOS,FRETE,TOTAL_DEVIDO
+  INTO m_venda_id, m_data, m_cliente, m_end_cob, m_end_ent, m_subtotal, m_imposto, m_frete, m_total
+  FROM VENDA 
+  WHERE VENDA_ID = &vstring;
+  dbms_output.put_line('VENDA_ID ' || m_venda_id);
+  dbms_output.put_line('DATA VENDA ' || m_data);
+  dbms_output.put_line('CLIENTE_ID ' || m_cliente);
+  dbms_output.put_line('END COBR ' || m_end_cob);
+  dbms_output.put_line('END ENT ' || m_end_ent);
+  dbms_output.put_line('SUBTOTAL ' || m_subtotal);
+  dbms_output.put_line('IMPOSTO ' || m_imposto);
+  dbms_output.put_line('FRETE ' || m_frete);
+  dbms_output.put_line('TOTAL DEV ' || m_total);
+
+  EXCEPTION WHEN NO_DATA_FOUND THEN  dbms_output.put_line('NAO EXISTE VENDA COM ESSE IDENTIFICADOR');
+END;
+
 
