@@ -32,20 +32,21 @@ SET SERVEROUTPUT ON
 
 DECLARE 
   u_venda_id NUMBER(38,2);
-	u_total_unitario NUMBER(38,2);
+  u_venda_item_id NUMBER(38,2);
+  u_total_unitario NUMBER(38,2);
   
-  CURSOR vcursor IS SELECT VENDA_ID, TOTAL_UNITARIO FROM VENDA_ITEM;
+  CURSOR vcursor IS SELECT VENDA_ID, VENDA_ITEM_ID, TOTAL_UNITARIO FROM VENDA_ITEM;
  
 BEGIN
   OPEN vcursor;
   LOOP
-    FETCH vcursor INTO u_venda_id,u_total_unitario;
+    FETCH vcursor INTO u_venda_id,u_venda_item_id,u_total_unitario;
     EXIT WHEN vcursor%notfound;
-    UPDATE VENDA set SUBTOTAL=(SUBTOTAL + u_total_unitario) WHERE VENDA.VENDA_ID = u_total_unitario;
-    
+    UPDATE VENDA set SUBTOTAL=(SUBTOTAL + u_total_unitario) WHERE VENDA.VENDA_ID = u_venda_id;
   END LOOP;
   CLOSE vcursor;
 END;
+
 
 --Itere sobre a tabela 'PRODUTO' e imprima as seguintes mensagens 
 
@@ -53,16 +54,21 @@ PRODUTO EM FALTA: {PRODUTO_ID} - {ǸOME}, caso 	QUANTIDADE=0
 
 PRODUTO EM BAIXA QUANTIDADE: {PRODUTO_ID} - {ǸOME} - {QUANTIDADE} caso 	QUANTIDADE<0
 
-
+SET SERVEROUTPUT ON
 
 BEGIN
-  FOR tabela IN (SELECT PRODUTO_ID, NOME, QUANTIDADE FROM PRODUTOS)
+  FOR tabela IN (SELECT PRODUTO_ID, NOME, QUANTIDADE FROM PRODUTO WHERE QUANTIDADE=0)
   LOOP
     dbms_output.put_line('PRUDUTO EM FALTA:' || tabela.PRODUTO_ID  || tabela.NOME || tabela.QUANTIDADE );
   END LOOP;
 END;
 
-
+BEGIN
+  FOR tabela IN (SELECT PRODUTO_ID, NOME, QUANTIDADE FROM PRODUTO WHERE (QUANTIDADE!=0 AND QUANTIDADE<10))
+  LOOP
+    dbms_output.put_line('PRUDUTO EM BAIXA: ' || tabela.PRODUTO_ID || ' ' || tabela.NOME || ' ' || tabela.QUANTIDADE );
+  END LOOP;
+END;
 
 
 
