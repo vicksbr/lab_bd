@@ -38,6 +38,7 @@ BEGIN
      dbms_output.put_line('Valor com imposto: ' || (u_valor_calculado + p_valor)); 
 END;
 
+3)
 
 CREATE OR REPLACE FUNCTION venda_status_texto (cod_status IN NUMBER) RETURN VARCHAR2 IS
    
@@ -57,3 +58,17 @@ BEGIN
   RETURN resposta;
 
 END;
+
+4)
+
+set serveroutput on
+
+CREATE OR REPLACE FUNCTION password_hash (senha VARCHAR2) return VARCHAR2 is 
+
+ v_input varchar2(2000) := senha;   
+ hexkey varchar2(32) := null;   
+
+BEGIN   
+   hexkey := rawtohex(dbms_obfuscation_toolkit.md5(input => utl_raw.cast_to_raw(v_input)));   
+   return nvl(hexkey,'');   
+END; 
