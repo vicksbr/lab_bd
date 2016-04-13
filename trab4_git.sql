@@ -72,3 +72,41 @@ BEGIN
    hexkey := rawtohex(dbms_obfuscation_toolkit.md5(input => utl_raw.cast_to_raw(v_input)));   
    return nvl(hexkey,'');   
 END; 
+
+5)
+
+CREATE OR REPLACE FUNCTION password_hash (senha VARCHAR2) return VARCHAR2 is 
+
+ v_input varchar2(2000) := senha;   
+ hexkey varchar2(32) := null;   
+
+BEGIN   
+   hexkey := rawtohex(dbms_obfuscation_toolkit.md5(input => utl_raw.cast_to_raw(v_input)));   
+   return nvl(hexkey,'');      
+END;
+
+6) 
+
+create or replace FUNCTION login (p_login VARCHAR2, p_senha VARCHAR2) return VARCHAR2 is 
+
+ resposta varchar2(100) := '';   
+ u_pessoa_id NUMBER(38,2);
+ u_password VARCHAR2(100);
+ 
+ CURSOR vcursor IS SELECT PESSOA_ID, PASSWORD_HASH FROM PESSOA WHERE EMAIL=p_login; 
+ CURSOR emp_cursor IS SELECT PESSOA_ID FROM EMPREGADO WHERE LOGIN_ID=p_login; 
+ 
+BEGIN   
+   
+   OPEN vcursor;
+   FETCH vcursor INTO u_pessoa_id, u_password;
+   CLOSE vcursor;   
+   IF u_pessoa_id IS NULL THEN 
+      dbms_output.put_line('nao encontrou');    
+   ELSE  
+      dbms_output.put_line('encontrou');
+   END IF;
+   RETURN resposta;      
+
+END;
+
