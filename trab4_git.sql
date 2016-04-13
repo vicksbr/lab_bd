@@ -3,7 +3,7 @@
 create or replace PROCEDURE produto_altera_preco (prod_id in number, prod_valro in number) AS
     
 BEGIN
-    UPDATE produto SET PRECO=prod_valro WHERE PRODUTO_ID=prod_id;
+    UPDATE produto SET PRECO=prod_valro, ULTIMA_MODIFICACAO=SYSTIMESTAMP WHERE PRODUTO_ID=prod_id;
     EXCEPTION
       WHEN NO_DATA_FOUND THEN
         DBMS_OUTPUT.PUT_LINE('nao existe produto com esse id'); 
