@@ -14,12 +14,23 @@ END;
 --imprimir o valor com imposto e sem imposto
 --utilizar só os tipo 1,2,3 de imposto no calculo
 
-create or replace PROCEDURE calcula_imposto (valor_imposto in number, estado_id in number) AS
+set serveroutput on
 
+CREATE OR REPLACE PROCEDURE calcula_imposto (valor in number, estado_id in number) AS
+
+  u_estado_id NUMBER(38,2);
+  u_imposto_nome VARCHAR2(50);
+  u_taxa NUMBER(38,2);
+  
+  CURSOR vcursor IS SELECT ESTADO_ID, NOME, TAXA FROM IMPOSTO WHERE ESTADO_ID=estado_id;
+  
 BEGIN
-  FOR item IN (SELECT ESTADO_ID, NOME FROM IMPOSTO)
-  LOOP
-    dbms_output.put_line( item.ESTADO_ID || item.NOME );	
-  END LOOP;
+    OPEN vcursor;
+    LOOP
+      FETCH vcursor INTO u_estado_id, u_imposto_nome, u_taxa;
+      EXIT WHEN vcursor%notfound;
+      dbms_output.put_line('Nome: ' || u_imposto_nome  || ' Valor: '|| u_taxa );
+    END LOOP;
+    CLOSE vcursor;
 END;
 
