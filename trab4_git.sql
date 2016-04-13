@@ -38,3 +38,22 @@ BEGIN
      dbms_output.put_line('Valor com imposto: ' || (u_valor_calculado + p_valor)); 
 END;
 
+
+CREATE OR REPLACE FUNCTION venda_status_texto (cod_status IN NUMBER) RETURN VARCHAR2 IS
+   
+   resposta varchar2(50) := '';
+   
+BEGIN
+  CASE
+      WHEN cod_status = '1' THEN resposta := 'Processando';
+      WHEN cod_status = '2' THEN resposta := 'Aprovado';
+      WHEN cod_status = '3' THEN resposta := 'Em espera';
+      WHEN cod_status = '4' THEN resposta := 'Rejeitado';
+      WHEN cod_status = '5' THEN resposta := 'Enviado';
+      WHEN cod_status = '6' THEN resposta := 'Cancelado';
+      ELSE resposta := 'Invalido';
+  END CASE;
+  
+  RETURN resposta;
+
+END;
