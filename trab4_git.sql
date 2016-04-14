@@ -2,17 +2,17 @@
 
 create or replace PROCEDURE produto_altera_preco (prod_id in number, prod_valro in number) AS
     
+    confere NUMBER(38,2);
+    
 BEGIN
+    SELECT PRODUTO_ID INTO confere FROM PRODUTO WHERE PRODUTO_ID=prod_id;
     UPDATE produto SET PRECO=prod_valro, ULTIMA_MODIFICACAO=SYSTIMESTAMP WHERE PRODUTO_ID=prod_id;
     EXCEPTION
       WHEN NO_DATA_FOUND THEN
         DBMS_OUTPUT.PUT_LINE('nao existe produto com esse id'); 
 END;
 
-
---calcula imposto do estado
---imprimir o valor com imposto e sem imposto
---utilizar só os tipo 1,2,3 de imposto no calculo
+2)
 
 set serveroutput on
 
@@ -85,7 +85,7 @@ BEGIN
    return nvl(hexkey,'');      
 END;
 
-6) 
+6) incompleta
 
 create or replace FUNCTION login (p_login VARCHAR2, p_senha VARCHAR2) return VARCHAR2 is 
 
@@ -109,4 +109,3 @@ BEGIN
    RETURN resposta;      
 
 END;
-
