@@ -26,7 +26,14 @@ BEGIN
   UPDATE VENDA set subtotal=u_subtotal + (u_conta_nova - u_conta_antiga) WHERE VENDA_ID=:OLD.VENDA_ID;
 END;
 
-
+2)
+  a)
+CREATE OR REPLACE TRIGGER venda_trigger
+BEFORE INSERT OR UPDATE ON venda
+FOR EACH ROW 
+BEGIN
+    :new.numero_revisao := :old.numero_revisao + 1; /* Trigger BEFORE permite atualizar NEW */
+END;
 
 
 
