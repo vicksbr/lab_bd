@@ -1,0 +1,6 @@
+1)
+
+CREATE OR REPLACE VIEW empregado_departamento AS 
+SELECT emp.PESSOA_ID, dep.DEPARTAMENTO_ID, dep.NOME, (pes.NOME || ' ' || pes.NOME_DO_MEIO || ' ' || pes.SOBRENOME || ' ' || pes.SUFIXO ) as Pessoa_Nome FROM EMPREGADO emp 
+INNER JOIN DEPARTAMENTO dep on emp.DEPARTAMENTO_ID = dep.DEPARTAMENTO_ID
+INNER JOIN PESSOA pes on emp.PESSOA_ID = pes.PESSOA_ID;
