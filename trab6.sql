@@ -14,4 +14,18 @@ SELECT  cli.CLIENTE_ID, cli.PESSOA_ID,
 FROM CLIENTE cli
 INNER JOIN ENDERECO ende on ende.PESSOA_ID = cli.PESSOA_ID
 INNER JOIN TELEFONE tel on  tel.PESSOA_ID = cli.PESSOA_ID
-INNER JOIN PESSOA pes on pes.PESSOA_ID = cli.PESSOA_ID
+INNER JOIN PESSOA pes on pes.PESSOA_ID = cli.PESSOA_ID;
+
+3)
+
+CREATE OR REPLACE VIEW vendedor_dados AS
+SELECT vend.PESSOA_ID, 
+       vend.COTA_VENDAS,
+       vend.BONUS,
+       vend.COMISSAO,
+       vend.VENDAS_ANO_ATUAL,
+       vend.VENDAS_ULTIMO_ANO,
+       (pes.NOME || ' ' || pes.NOME_DO_MEIO || ' ' || pes.SOBRENOME || ' ' || pes.SUFIXO) as Vendedor_Nome        
+FROM VENDEDOR vend
+INNER JOIN PESSOA pes on vend.PESSOA_ID = pes.PESSOA_ID;
+
