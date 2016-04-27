@@ -47,21 +47,16 @@ DROP TABLE temp;
 
 5)
 
-CREATE OR REPLACE FUNCTION identificaTipo RETURN VARCHAR2 IS
-    hashhh VARCHAR2(128 BYTE);
-    pessoa_id number(38,2);
-    email VARCHAR2(50 BYTE);
-    login VARCHAR2(250 BYTE);
-    retorno number(38,2);
-BEGIN
-    SELECT PESSOA.PASSWORD_HASH, PESSOA.PESSOA_ID, PESSOA.EMAIL INTO hashhh,pessoa_id,email FROM PESSOA WHERE PESSOA_ID = 79;
-    dbms_output.put_line(hashhh);    
-    
-    BEGIN
-      SELECT LOGIN_ID INTO login FROM EMPREGADO WHERE PESSOA_ID=79;
-      EXCEPTION 
-        WHEN NO_DATA_FOUND THEN    
-          dbms_output.put_line('nao eh funcionario');            
-          RETURN 'cliente'
-    END;
-END;        
+nao consegui criar a trigger
+
+CREATE MATERIALIZED VIEW pessoa_login 
+BUILD IMMEDIATE
+REFRESH COMPLETE
+AS
+SELECT emp.LOGIN_ID as "login" , pe.PASSWORD_HASH "password_hash" , 'funcionario' as "tipo_usuario"
+FROM PESSOA pe
+INNER JOIN EMPREGADO emp on pe.PESSOA_ID = emp.PESSOA_ID
+UNION ALL
+SELECT pe.EMAIL as "login" , pe.PASSWORD_HASH "password_hash" , 'cliente' as "tipo_usuario" 
+FROM PESSOA pe
+INNER JOIN CLIENTE cli on pe.PESSOA_ID = cli.PESSOA_ID;
