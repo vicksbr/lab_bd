@@ -1,0 +1,14 @@
+CREATE INDEX telelefone_indice ON TELEFONE (numero);
+CREATE INDEX modelo_indice ON PRODUTO (modelo);
+CREATE INDEX nomes_indice ON PESSOA (sobrenome,nome,nome_do_meio);
+CREATE INDEX sexo_indice ON EMPREGADO (sexo);
+
+/*Nao funciona, por causa do tipo CLOB do atributo, nao consegui resolver*/
+/*CREATE INDEX atrib_indice ON PRODUTO (descricao); */
+
+/*Os indices sobre as chaves estrangerias ja são feitos 
+  de forma automática na criação das restrições de integridade
+  da tabela
+*/
+  
+
