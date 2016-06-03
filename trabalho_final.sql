@@ -1,6 +1,8 @@
 Relatorio
 
 1) conversar sobre, adicionar total todas com um comando analitico no SELECT * FROM (SUB QUERY) 
+	http://docs.oracle.com/cd/B19306_01/server.102/b14223/analysis.htm#i1007516 Fillin  Gaps in Data
+
 
 CREATE GLOBAL TEMPORARY TABLE tabela1
 on commit preserve rows
