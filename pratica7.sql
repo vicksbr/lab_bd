@@ -1,13 +1,4 @@
-CONTADOR DE TIMES PARA CAMPEONATO COM ID TAL
-
-SELECT COUNT(*) FROM (
-SELECT DISTINCT * FROM ( 
-SELECT TTIME1 FROM F11_PARTIDA WHERE IDCAMPEONATOP = 17
-UNION
-SELECT TTIME2 FROM F11_PARTIDA WHERE IDCAMPEONATOP = 17
-));
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 create or replace TRIGGER VERIFICA_ESTADIO_PARTIDA
 BEFORE INSERT OR DELETE OR UPDATE
@@ -17,7 +8,6 @@ FOR EACH ROW
 
 DECLARE cidade_time F04_TIME.CIDADE%type; 
         cidade_estadio F09_ESTADIO.CIDADE%type;
-        cidadesDiferentes EXCEPTION;
 BEGIN
     SELECT CIDADE INTO cidade_time FROM F04_TIME where F04_TIME.TTIME = :NEW.TTIME1;
     SELECT CIDADE into cidade_estadio FROM F09_ESTADIO where F09_ESTADIO.IDESTADIO = :NEW.IDESTADIOP;
@@ -52,7 +42,7 @@ BEGIN
         GROUP BY team.TTIME
     ); 
 
-    IF (jogadores > 5) THEN
+    IF (jogadores => 5) THEN
           RAISE_APPLICATION_ERROR (-20500
         , 'Só podemos ter 5 inscritos por time'); 
     END IF;    
